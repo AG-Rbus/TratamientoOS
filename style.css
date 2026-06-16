@@ -299,6 +299,33 @@ input, textarea {
 .chip-estado--proceso { background: var(--estado-proceso-bg); color: var(--estado-proceso); }
 .chip-estado--finalizado { background: var(--estado-finalizado-bg); color: var(--estado-finalizado); }
 
+.filtro-fichas {
+  display: flex;
+  gap: 8px;
+  padding: 6px var(--espacio-pantalla) 4px;
+  overflow-x: auto;
+}
+
+.chip-filtro {
+  font-family: var(--f-mono);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--texto-tenue);
+  background: var(--tarjeta);
+  border: 1px solid var(--tarjeta-borde);
+  padding: 7px 13px;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.chip-filtro--activo {
+  background: var(--ambar-suave);
+  border-color: var(--ambar);
+  color: var(--ambar);
+}
+
 .lista-ordenes {
   padding: 10px var(--espacio-pantalla) 32px;
   display: flex;
@@ -381,6 +408,10 @@ input, textarea {
   margin-bottom: 2px;
 }
 
+.dato__label--sub {
+  margin-top: 10px;
+}
+
 .dato__valor {
   font-size: 14px;
   color: var(--texto);
@@ -410,6 +441,17 @@ input, textarea {
   font-size: 13.5px;
   margin: 0;
   line-height: 1.5;
+}
+
+.boton-enlace {
+  background: none;
+  border: none;
+  color: var(--ambar);
+  font-size: 13.5px;
+  font-weight: 600;
+  text-decoration: underline;
+  margin-top: 16px;
+  padding: 6px;
 }
 
 /* ===================== MODAL ===================== */
