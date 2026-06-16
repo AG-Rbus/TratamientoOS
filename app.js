@@ -16,6 +16,8 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbyMBFZN7cFNz72y3eR-RRUB
 let legajoActual = '';
 let ordenesActuales = [];
 let ordenSeleccionada = null;
+let textoBusquedaFicha = '';
+const busquedaFichaInput = document.getElementById('busquedaFicha');
 const ordenesEnProcesoDeEnvio = new Set(); // evita doble clic por orden
 
 // --------------------------------------------------------------------
@@ -32,7 +34,11 @@ const btnActualizar = document.getElementById('btnActualizar');
 const legajoLabel = document.getElementById('legajoLabel');
 const listaOrdenes = document.getElementById('listaOrdenes');
 const estadoVacio = document.getElementById('estadoVacio');
+const estadoVacioTitulo = document.getElementById('estadoVacioTitulo');
+const estadoVacioTexto = document.getElementById('estadoVacioTexto');
+const btnLimpiarFiltro = document.getElementById('btnLimpiarFiltro');
 const resumenEstados = document.getElementById('resumenEstados');
+const filtroFichasEl = document.getElementById('filtroFichas');
 
 const modalFinalizar = document.getElementById('modalFinalizar');
 const modalOrdenRef = document.getElementById('modalOrdenRef');
@@ -173,12 +179,41 @@ async function manejarBuscarOrdenes() {
 // PANTALLA 2 — RENDER DE TARJETAS
 // --------------------------------------------------------------------
 
-function renderizarOrdenes() {
-  listaOrdenes.innerHTML = '';
-
-  // Resumen de chips por estado
-  const conteo = { creado: 0, proceso: 0 };
+function obtenerFichasUnicas() {
+  const set = new Set();
   ordenesActuales.forEach(o => {
+    const valor = String(o.Ficha || '').trim();
+    if (valor) set.add(valor);
+  });
+  return Array.from(set).sort((a, b) => a.localeCompare(b, 'es', { numeric: true }));
+}
+
+function renderizarFiltroFichas(fichas) {
+  if (fichas.length === 0) {
+    filtroFichasEl.classList.add('oculto');
+    return;
+  }
+
+  filtroFichasEl.classList.remove('oculto');
+}
+
+function renderizarOrdenes() {
+  const fichas = obtenerFichasUnicas();
+  renderizarFiltroFichas(fichas);
+
+const texto = textoBusquedaFicha.trim().toLowerCase();
+
+const ordenesFiltradas = texto
+  ? ordenesActuales.filter(o =>
+      String(o.Ficha || '')
+        .toLowerCase()
+        .includes(texto)
+    )
+  : ordenesActuales;
+
+  // Resumen de chips por estado (sobre lo que se está mostrando)
+  const conteo = { creado: 0, proceso: 0 };
+  ordenesFiltradas.forEach(o => {
     const e = normalizarEstado(o.Estado);
     if (conteo[e] !== undefined) conteo[e]++;
   });
@@ -187,13 +222,26 @@ function renderizarOrdenes() {
     <span class="chip-estado chip-estado--proceso">${conteo.proceso} en proceso</span>
   `;
 
+  listaOrdenes.innerHTML = '';
+
   if (ordenesActuales.length === 0) {
+    estadoVacioTitulo.textContent = 'Sin órdenes pendientes';
+    estadoVacioTexto.textContent = 'No hay órdenes "Creadas" o "En proceso" para este legajo.';
+    btnLimpiarFiltro.classList.add('oculto');
     estadoVacio.classList.remove('oculto');
     return;
   }
+
+  if (ordenesFiltradas.length === 0) {
+    estadoVacioTitulo.textContent = 'Sin resultados para esta ficha';
+    btnLimpiarFiltro.classList.remove('oculto');
+    estadoVacio.classList.remove('oculto');
+    return;
+  }
+
   estadoVacio.classList.add('oculto');
 
-  ordenesActuales.forEach(orden => {
+  ordenesFiltradas.forEach(orden => {
     listaOrdenes.appendChild(crearTarjetaOrden(orden));
   });
 }
@@ -224,6 +272,8 @@ function crearTarjetaOrden(orden) {
       <div class="dato">
         <div class="dato__label">Taller</div>
         <div class="dato__valor">${escaparHtml(orden.Taller)}</div>
+        <div class="dato__label dato__label--sub">Fecha inicio</div>
+        <div class="dato__valor">${escaparHtml(orden.FechaInicial || '—')}</div>
       </div>
       <div class="dato dato--ancho">
         <div class="dato__label">Descripción</div>
@@ -402,6 +452,17 @@ btnActualizar.addEventListener('click', manejarActualizar);
 
 btnCancelarModal.addEventListener('click', cerrarModalFinalizar);
 btnConfirmarFinalizar.addEventListener('click', manejarConfirmarFinalizar);
+
+btnLimpiarFiltro.addEventListener('click', () => {
+  textoBusquedaFicha = '';
+  busquedaFichaInput.value = '';
+  renderizarOrdenes();
+});
+
+busquedaFichaInput.addEventListener('input', () => {
+  textoBusquedaFicha = busquedaFichaInput.value;
+  renderizarOrdenes();
+});
 
 // Cerrar el modal tocando el fondo oscuro (no el contenido)
 modalFinalizar.addEventListener('click', (e) => {

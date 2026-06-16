@@ -29,7 +29,7 @@
         class="input-legajo"
         type="text"
         inputmode="numeric"
-        placeholder="Ej: 78891"
+        placeholder="Ej: 4521"
         autocomplete="off"
         maxlength="12">
       <button id="btnBuscar" class="boton boton--primario boton--full">
@@ -54,13 +54,23 @@
 
   <div id="resumenEstados" class="resumen-estados"></div>
 
+  <div id="filtroFichas" class="filtro-fichas oculto">
+  <input
+    id="busquedaFicha"
+    class="input-texto"
+    type="text"
+    placeholder="Buscar ficha..."
+    autocomplete="off">
+  </div>
+
   <div id="listaOrdenes" class="lista-ordenes">
     <!-- Las tarjetas se generan dinámicamente -->
   </div>
 
   <div id="estadoVacio" class="estado-vacio oculto">
-    <p class="estado-vacio__titulo">Sin órdenes pendientes</p>
-    <p class="estado-vacio__texto">No hay órdenes "Creadas" o "En proceso" para este legajo.</p>
+    <p id="estadoVacioTitulo" class="estado-vacio__titulo">Sin órdenes pendientes</p>
+    <p id="estadoVacioTexto" class="estado-vacio__texto">No hay órdenes "Creadas" o "En proceso" para este legajo.</p>
+    <button id="btnLimpiarFiltro" class="boton-enlace oculto">Ver todas las fichas</button>
   </div>
 </section>
 
