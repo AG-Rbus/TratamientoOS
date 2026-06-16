@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0d1117">
+<title>Panel de Limpieza · Colectivos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===================== PANTALLA 1 — INGRESO ===================== -->
+<section id="pantallaIngreso" class="pantalla pantalla--activa">
+  <div class="ingreso-wrap">
+
+    <div class="marca">
+      <span class="marca__eyebrow">PANEL OPERATIVO</span>
+      <h1 class="marca__titulo">Limpieza<span class="marca__punto">.</span>Colectivos</h1>
+      <p class="marca__sub">Gestión de órdenes de servicio en taller</p>
+    </div>
+
+    <div class="tarjeta-ingreso">
+      <label class="campo-label" for="legajoInput">Legajo</label>
+      <input
+        id="legajoInput"
+        class="input-legajo"
+        type="text"
+        inputmode="numeric"
+        placeholder="Ej: 78891"
+        autocomplete="off"
+        maxlength="12">
+      <button id="btnBuscar" class="boton boton--primario boton--full">
+        Buscar Órdenes
+      </button>
+    </div>
+
+    <p class="ingreso-ayuda">Ingresá tu número de legajo para ver tus órdenes pendientes y en curso.</p>
+  </div>
+</section>
+
+<!-- ===================== PANTALLA 2 — ÓRDENES ===================== -->
+<section id="pantallaOrdenes" class="pantalla">
+  <header class="cabecera">
+    <button id="btnVolver" class="boton-icono" aria-label="Volver" title="Volver">‹</button>
+    <div class="cabecera__info">
+      <span class="cabecera__eyebrow">LEGAJO</span>
+      <span id="legajoLabel" class="cabecera__legajo">—</span>
+    </div>
+    <button id="btnActualizar" class="boton-icono" aria-label="Actualizar" title="Actualizar">⟲</button>
+  </header>
+
+  <div id="resumenEstados" class="resumen-estados"></div>
+
+  <div id="listaOrdenes" class="lista-ordenes">
+    <!-- Las tarjetas se generan dinámicamente -->
+  </div>
+
+  <div id="estadoVacio" class="estado-vacio oculto">
+    <p class="estado-vacio__titulo">Sin órdenes pendientes</p>
+    <p class="estado-vacio__texto">No hay órdenes "Creadas" o "En proceso" para este legajo.</p>
+  </div>
+</section>
+
+<!-- ===================== MODAL — FINALIZAR TRABAJO ===================== -->
+<div id="modalFinalizar" class="modal-overlay oculto">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
+    <div class="modal__cabecera">
+      <h2 id="modalTitulo">Finalizar trabajo</h2>
+      <span id="modalOrdenRef" class="modal__ref"></span>
+    </div>
+
+    <div class="modal__cuerpo">
+      <label class="campo-label" for="campoSintoma">Síntoma <span class="obligatorio">*</span></label>
+      <input id="campoSintoma" class="input-texto" type="text" placeholder="Describí el síntoma detectado">
+
+      <label class="campo-label" for="campoCausa">Causa <span class="obligatorio">*</span></label>
+      <input id="campoCausa" class="input-texto" type="text" placeholder="Describí la causa">
+
+      <label class="campo-label" for="campoComentario">Comentario <span class="obligatorio">*</span></label>
+      <textarea id="campoComentario" class="input-textarea" rows="3" placeholder="Comentario sobre el trabajo realizado"></textarea>
+
+      <p id="errorModal" class="modal__error oculto">Completá los tres campos para finalizar.</p>
+    </div>
+
+    <div class="modal__acciones">
+      <button id="btnCancelarModal" class="boton boton--secundario">Cancelar</button>
+      <button id="btnConfirmarFinalizar" class="boton boton--finalizar">Confirmar y finalizar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TOAST DE MENSAJES ===================== -->
+<div id="toast" class="toast oculto"></div>
+
+<!-- ===================== OVERLAY DE CARGA ===================== -->
+<div id="overlayCarga" class="overlay-carga oculto">
+  <div class="spinner"></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
