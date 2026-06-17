@@ -257,9 +257,14 @@ input, textarea {
   top: 0;
   z-index: 5;
 }
-.cabecera-div {
+.cabecera div {
   display: flex;  
   padding: 0px 16px var(--espacio-pantalla);
+}
+
+.cabecera-filtro {
+  display: inline-block;
+  align-items: center;
 }
 
 .cabecera__info {
@@ -617,4 +622,9 @@ input, textarea {
 
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+@media (max-width: 600px) {
+  .cabecera-filtro .filtro-fichas {width: 100%;}
+  .cabecera-filtro .resumen-estados {display: none;}
 }

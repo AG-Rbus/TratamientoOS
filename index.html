@@ -44,29 +44,30 @@
 <!-- ===================== PANTALLA 2 — ÓRDENES ===================== -->
 <section id="pantallaOrdenes" class="pantalla">
   <header class="cabecera">
-    <div class="cabecera-div">
+    <div>
       <button id="btnVolver" class="boton-icono" aria-label="Volver" title="Volver">‹</button>
       <div class="cabecera__info">
         <span class="cabecera__eyebrow">LEGAJO</span>
         <span id="legajoLabel" class="cabecera__legajo">—</span>
       </div>
        <button id="btnActualizar" class="boton-icono" aria-label="Actualizar" title="Actualizar">⟲</button>
-
+    </div>
+    <div class="cabecera-filtro">
+      <div id="filtroFichas" class="filtro-fichas oculto">
+        <input
+          id="busquedaFicha"
+          class="input-texto"
+          type="text"
+          placeholder="Buscar ficha..."
+          autocomplete="off">
+      </div>
+      <div id="resumenEstados" class="resumen-estados"></div>
     </div>
     
-    <div id="filtroFichas" class="filtro-fichas oculto">
-    <input
-      id="busquedaFicha"
-      class="input-texto"
-      type="text"
-      placeholder="Buscar ficha..."
-      autocomplete="off">
-    </div>
 
-    <div id="resumenEstados" class="resumen-estados"></div>
   </header>
 
-  
+
 
   <div id="listaOrdenes" class="lista-ordenes">
     <!-- Las tarjetas se generan dinámicamente -->
