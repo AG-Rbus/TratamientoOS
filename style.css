@@ -259,7 +259,7 @@ input, textarea {
 }
 .cabecera-div {
   display: flex;  
-  padding: 16px var(--espacio-pantalla);
+  padding: 0px 16px var(--espacio-pantalla);
 }
 
 .cabecera__info {
