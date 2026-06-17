@@ -257,14 +257,16 @@ input, textarea {
   top: 0;
   z-index: 5;
 }
-.cabecera div {
+.cabecera-principal {
   display: flex;  
   padding: 0px 16px var(--espacio-pantalla);
 }
 
 .cabecera-filtro {
-  display: inline-block;
-  align-items: center;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  align-items: center ;
 }
 
 .cabecera__info {
@@ -311,6 +313,7 @@ input, textarea {
 
 .filtro-fichas {
   display: flex;
+  width: 60%;
   gap: 8px;
   padding: 6px var(--espacio-pantalla) 4px;
   overflow-x: auto;
@@ -624,7 +627,10 @@ input, textarea {
   * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
+  .cabecera {display: flex; justify-content: center; align-items: center; flex-direction: column;}
+  .cabecera .cabecera-principal { width: 100%;}
+  .cabecera-filtro {flex-direction: column;}
   .cabecera-filtro .filtro-fichas {width: 100%;}
-  .cabecera-filtro .resumen-estados {display: none;}
+
 }
