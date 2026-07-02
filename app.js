@@ -356,7 +356,6 @@ function abrirModalFinalizar(orden) {
   campoSintoma.value = '';
   campoCausa.value = '';
   campoComentario.value = '';
-  pendiente.
   errorModal.classList.add('oculto');
   modalFinalizar.classList.remove('oculto');
   setTimeout(() => campoSintoma.focus(), 50);
@@ -391,29 +390,6 @@ async function manejarConfirmarFinalizar() {
 
   const fechaFinal = fechaActualTexto();
   const tiempoFinal = horaActualTexto();
-
-  if (pendiente.checked) {
-  try {
-    await apiPost({
-      action: 'creado',
-      Orden: idOrden,
-      sintoma: "",
-      causa: "",
-      comentario: "",
-      fechaFinal: "",
-      tiempoFinal: ""
-    });
-    
-    cerrarModalFinalizar();
-    mostrarToast('Trabajo pendiente registrado', 'exito');
-    renderizarOrdenes();    
-  } catch (err) {
-    mostrarToast(err.message || 'No se pudo finalizar el trabajo', 'error');
-  } finally {
-    btnConfirmarFinalizar.disabled = true;
-    btnConfirmarFinalizar.textContent = textoOriginal;
-  }
-}
 
   try {
     await apiPost({
