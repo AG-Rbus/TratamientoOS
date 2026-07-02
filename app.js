@@ -43,7 +43,7 @@ const filtroFichasEl = document.getElementById('filtroFichas');
 const modalFinalizar = document.getElementById('modalFinalizar');
 const modalOrdenRef = document.getElementById('modalOrdenRef');
 const campoSintoma = document.getElementById('campoSintoma');
-const pendiente = document.getElementById('pendiente');
+const pendiente = document.getElementById('campoPendiente');
 const campoCausa = document.getElementById('campoCausa');
 const campoComentario = document.getElementById('campoComentario');
 const errorModal = document.getElementById('errorModal');
@@ -351,7 +351,6 @@ async function manejarIniciarTrabajo(orden, boton) {
 // --------------------------------------------------------------------
 
 function abrirModalFinalizar(orden) {
-  pendiente.checked = false;
   ordenSeleccionada = orden;
   modalOrdenRef.textContent = `Orden ${orden.Orden} · Ficha ${orden.Ficha}`;
   campoSintoma.value = '';
@@ -360,6 +359,7 @@ function abrirModalFinalizar(orden) {
   errorModal.classList.add('oculto');
   modalFinalizar.classList.remove('oculto');
   setTimeout(() => campoSintoma.focus(), 50);
+  pendiente.checked = false;
 }
 
 function cerrarModalFinalizar() {
@@ -374,6 +374,17 @@ async function manejarConfirmarFinalizar() {
   const causa = campoCausa.value.trim();
   const comentario = campoComentario.value.trim();
   const pendiente = document.getElementById('campoPendiente');
+
+  const idOrden = ordenSeleccionada.Orden;
+  if (ordenesEnProcesoDeEnvio.has(idOrden)) return;
+  ordenesEnProcesoDeEnvio.add(idOrden);
+
+  btnConfirmarFinalizar.disabled = true;
+  const textoOriginal = btnConfirmarFinalizar.textContent;
+  btnConfirmarFinalizar.textContent = 'Guardando…';
+
+  const fechaFinal = fechaActualTexto();
+  const tiempoFinal = horaActualTexto();
 
   if (pendiente.checked) {
     try {
@@ -412,17 +423,6 @@ async function manejarConfirmarFinalizar() {
     return;
   }
   errorModal.classList.add('oculto');
-
-  const idOrden = ordenSeleccionada.Orden;
-  if (ordenesEnProcesoDeEnvio.has(idOrden)) return;
-  ordenesEnProcesoDeEnvio.add(idOrden);
-
-  btnConfirmarFinalizar.disabled = true;
-  const textoOriginal = btnConfirmarFinalizar.textContent;
-  btnConfirmarFinalizar.textContent = 'Guardando…';
-
-  const fechaFinal = fechaActualTexto();
-  const tiempoFinal = horaActualTexto();
 
   try {
     await apiPost({
