@@ -43,6 +43,7 @@ const filtroFichasEl = document.getElementById('filtroFichas');
 const modalFinalizar = document.getElementById('modalFinalizar');
 const modalOrdenRef = document.getElementById('modalOrdenRef');
 const campoSintoma = document.getElementById('campoSintoma');
+const pendiente = document.getElementById('pendiente');
 const campoCausa = document.getElementById('campoCausa');
 const campoComentario = document.getElementById('campoComentario');
 const errorModal = document.getElementById('errorModal');
@@ -355,6 +356,7 @@ function abrirModalFinalizar(orden) {
   campoSintoma.value = '';
   campoCausa.value = '';
   campoComentario.value = '';
+  pendiente.
   errorModal.classList.add('oculto');
   modalFinalizar.classList.remove('oculto');
   setTimeout(() => campoSintoma.focus(), 50);
@@ -371,6 +373,7 @@ async function manejarConfirmarFinalizar() {
   const sintoma = campoSintoma.value.trim();
   const causa = campoCausa.value.trim();
   const comentario = campoComentario.value.trim();
+  const pendiente = document.getElementById('campoPendiente');
 
   if (!sintoma || !causa || !comentario) {
     errorModal.classList.remove('oculto');
@@ -389,6 +392,29 @@ async function manejarConfirmarFinalizar() {
   const fechaFinal = fechaActualTexto();
   const tiempoFinal = horaActualTexto();
 
+  if (pendiente.checked) {
+  try {
+    await apiPost({
+      action: 'creado',
+      Orden: idOrden,
+      sintoma: "",
+      causa: "",
+      comentario: "",
+      fechaFinal: "",
+      tiempoFinal: ""
+    });
+    
+    cerrarModalFinalizar();
+    mostrarToast('Trabajo pendiente registrado', 'exito');
+    renderizarOrdenes();    
+  } catch (err) {
+    mostrarToast(err.message || 'No se pudo finalizar el trabajo', 'error');
+  } finally {
+    btnConfirmarFinalizar.disabled = true;
+    btnConfirmarFinalizar.textContent = textoOriginal;
+  }
+}
+
   try {
     await apiPost({
       action: 'finalizar',
@@ -399,6 +425,8 @@ async function manejarConfirmarFinalizar() {
       fechaFinal: fechaFinal,
       tiempoFinal: tiempoFinal
     });
+
+
 
     // Quitar la orden finalizada de la vista (ya no es "Creado"/"En proceso")
     ordenesActuales = ordenesActuales.filter(o => o.Orden !== idOrden);
