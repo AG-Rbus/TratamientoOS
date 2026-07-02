@@ -351,6 +351,7 @@ async function manejarIniciarTrabajo(orden, boton) {
 // --------------------------------------------------------------------
 
 function abrirModalFinalizar(orden) {
+  pendiente.checked = false;
   ordenSeleccionada = orden;
   modalOrdenRef.textContent = `Orden ${orden.Orden} · Ficha ${orden.Ficha}`;
   campoSintoma.value = '';
@@ -373,6 +374,38 @@ async function manejarConfirmarFinalizar() {
   const causa = campoCausa.value.trim();
   const comentario = campoComentario.value.trim();
   const pendiente = document.getElementById('campoPendiente');
+
+  if (pendiente.checked) {
+    try {
+    await apiPost({
+        action: "creado",
+        Orden: idOrden
+    });
+
+    ordenSeleccionada.Estado = "Creado";
+    ordenSeleccionada.HoraSalida = "";
+    ordenSeleccionada.FechaFinal = "";
+    ordenSeleccionada.TiempoFinal = "";
+    ordenSeleccionada.Sintoma = "";
+    ordenSeleccionada.Causa = "";
+    ordenSeleccionada.Comentario = "";
+
+    cerrarModalFinalizar();
+    mostrarToast("Trabajo marcado como pendiente", "exito");
+    renderizarOrdenes();
+
+    return;
+  }
+  catch(err){
+      mostrarToast(err.message || "No se pudo volver la orden a Creado","error");
+      return;
+  }
+  finally{
+      ordenesEnProcesoDeEnvio.delete(idOrden);
+      btnConfirmarFinalizar.disabled = false;
+      btnConfirmarFinalizar.textContent = textoOriginal;
+  }
+}
 
   if (!sintoma || !causa || !comentario) {
     errorModal.classList.remove('oculto');
